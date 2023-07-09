@@ -109,6 +109,8 @@ namespace IdentityApi.Infrastructure.Identity.Services
         public async Task<ICommandResult> UpdateUserStatusAsync(UpdateUserStatusRequest request)
         {
             var user = await _userManager.FindByIdAsync(request.IdUsuario);
+            if (user.UserName == "admin")
+                return await CommandResult.FailAsync("Não é possivel alterar o usuário admin");
             user.Ativo = request.AtivarUsuario;
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
