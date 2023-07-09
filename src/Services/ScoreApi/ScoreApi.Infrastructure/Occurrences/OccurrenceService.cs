@@ -27,4 +27,13 @@ public class OccurrenceService : IOccurrenceService
 
         return await CommandResult<Occurrence>.SuccessAsync(occurence);
     }
+
+    public async Task<CommandResult<List<Occurrence>>> GetOccurrences()
+    {
+        var occurrences = await _context.Occurrences
+            .AsNoTracking()
+            .ToListAsync();
+
+        return await CommandResult<List<Occurrence>>.SuccessAsync(occurrences);
+    }
 }

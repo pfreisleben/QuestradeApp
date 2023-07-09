@@ -1,5 +1,6 @@
 ﻿@page "/user-profile/{Id}"
 @using Blazored.FluentValidation
+@using global::Shared.Requests.Score
 @layout MainLayout
 
 <AppTitle Title="@Title" Description="@Description"/>
@@ -9,7 +10,7 @@
 }
 else
 {
-    <MudGrid>
+    <MudGrid Justify="Justify.Center">
         <AuthorizeView Roles="Admin">
             <MudItem xs="12" sm="12" md="12">
                 <MudCard Elevation="25">
@@ -53,6 +54,44 @@ else
                 </MudCard>
             </EditForm>
         </MudItem>
+        @if (_scoreResponse != null)
+        {
+            <MudItem xs="12">
+                <MudPaper Elevation="0">
+                    <MudText Align="Align.Center" Typo="Typo.h4">
+                        <strong>Seu score é:</strong>
+                    </MudText>
+                    <MudText Align="Align.Center" Typo="Typo.h3">@_scoreResponse.value </MudText>
+                    @if (_scoreResponse.value >= 500)
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.h6">Você pode realizar empréstimos! :D</MudText>
+                    }
+                    else
+                    {
+                        <MudText Align="Align.Center" Typo="Typo.h6">Você não pode realizar empréstimos! :(</MudText>
+                    }
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudPaper Class="pa-4" Elevation="0" Outlined="true">
+                    <MudText Align="Align.Start" Typo="Typo.body1">Conheça seu histórico!</MudText>
+                    @foreach (var history in _scoreResponse.scoreHistories)
+                    {
+                        @if (history.occurrence.value > 0)
+                        {
+                            <MudPaper Outlined="true" Elevation="0" Class="pa-4" Style="@($"background:{Colors.Green.Lighten1};")">
+                                <MudStack Row="true">
+                                    <MudText Typo="Typo.body2"><strong>Motivo:</strong> @history.occurrence.description</MudText>
+                                    <MudText Typo="Typo.body2"><strong>Pontuação:</strong> @history.occurrence.value</MudText>
+                                </MudStack>
+                            </MudPaper>
+                        }
+                    }
+                </MudPaper>
+            </MudItem>
+        }
+
     </MudGrid>
 }
 
@@ -70,6 +109,8 @@ else
     private FluentValidationValidator _fluentValidationValidator;
     private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
 
+
+    private ScoreResponse? _scoreResponse;
     private bool _ativo;
     private string _email;
     public UserRequest UserModel { get; set; } = new();
@@ -115,6 +156,14 @@ else
     {
         var userId = Id;
         var result = await _userManager.GetAsync(userId);
+        var scoreResult = await _scoreManager.GetScoreByUserId(userId);
+
+
+        if (scoreResult.Succeeded)
+        {
+            _scoreResponse = scoreResult.Data;
+        }
+
         if (result.Succeeded)
         {
             _ativo = result.Data.Ativo;

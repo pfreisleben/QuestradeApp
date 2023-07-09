@@ -1,0 +1,49 @@
+﻿@page "/loans/add"
+@using global::Shared.Requests.Finance
+@using System.Security.Claims
+@layout MainLayout
+@attribute [Authorize]
+<AppTitle Title="Empréstimo" Description="Solicitar um novo empréstimo"/>
+<EditForm Model="_model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator/>
+      <MudTextField InputType="InputType.Text" Label="Nome" HelperText="Dê um nome ao empréstimo"
+                                          @bind-Value="_model.Description" For="@(() => _model.Description)"/>
+    <MudTextField InputType="InputType.Number" Label="Quantidade de parcelas" HelperText="Informe a quantidade de parcelas"
+                  @bind-Value="_model.NumberOfPortions" For="@(() => _model.NumberOfPortions)"/>
+    <MudTextField InputType="InputType.Number" Label="Valor do empréstimo" HelperText="Informe o valor do empréstimo"
+                  @bind-Value="_model.TotalAmount" For="@(() => _model.TotalAmount)"/>
+    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Solicitar</MudButton>
+</EditForm>
+
+@code {
+    private NewLoanRequest _model;
+    private ClaimsPrincipal _currentUser;
+    private string _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentUser = await _authenticationManager.CurrentUser();
+        _userId = _currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        var scoreResult = await _scoreManager.CheckIfUserCanApplyToLoan(_userId);
+        if (scoreResult.Succeeded)
+        {
+            var CanApplyToLoan = scoreResult.Data;
+
+            if (!CanApplyToLoan)
+            {
+                _snackBar.Add("Desculpe, você não pode solicitar um empréstimo no momento.", Severity.Error);
+                return;
+            }
+            
+            
+        }
+        else
+        {
+            
+        }
+    }
+}

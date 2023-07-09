@@ -22,4 +22,5 @@
       <ProjectReference Include="..\FinanceApi.Infrastructure\FinanceApi.Infrastructure.csproj" />
     </ItemGroup>
 
+
 </Project>

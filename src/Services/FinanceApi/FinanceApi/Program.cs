@@ -8,7 +8,7 @@ try
 {
     Log.Logger = LogExtensions.ConfigureStructuralLogWithSerilog(builder.Configuration);
     builder.Logging.AddSerilog(Log.Logger);
-
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     Log.Information("Iniciando a aplicação");
     
     builder.Services.AddServices(builder.Configuration);

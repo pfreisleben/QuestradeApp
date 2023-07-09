@@ -11,9 +11,11 @@
                 <MudAvatar Color="Color.Secondary">@Email.ToUpper()[0]</MudAvatar>
             </ActivatorContent>
             <ChildContent>
-                <UserCard />
-                <MudDivider Class="mb-2" />
-                <MudListItem Text="Logout" OnClick="BeginLogout" Icon="@Icons.Material.Filled.Logout" />
+                <UserCard/>
+                <MudDivider/>
+                <MudListItem Text="Perfil" OnClick="GoToProfile" Icon="@Icons.Material.Filled.VerifiedUser"/>
+                <MudDivider/>
+                <MudListItem Text="Logout" OnClick="BeginLogout" Icon="@Icons.Material.Filled.Logout"/>
             </ChildContent>
         </MudMenu>
     </Authorized>
@@ -27,6 +29,7 @@
 
 @code {
     private string Email { get; set; } = "U";
+    private string UserId { get; set; }
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -45,6 +48,7 @@
         if (user.Identity?.IsAuthenticated == true)
         {
             string userEmail = user.FindFirstValue(ClaimTypes.Name);
+            this.UserId = user.FindFirstValue(ClaimTypes.NameIdentifier);
             this.Email = userEmail;
         }
 
@@ -55,6 +59,11 @@
     private void BeginLogout(MouseEventArgs args)
     {
         _navigationManager.NavigateTo("/logout");
+    }
+
+    private void GoToProfile(MouseEventArgs args)
+    {
+        _navigationManager.NavigateTo($"/user-profile/{UserId}");
     }
 
 }

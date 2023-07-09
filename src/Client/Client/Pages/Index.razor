@@ -1,10 +1,82 @@
 ﻿@page "/"
+@using global::Shared.Requests.Score
+@using System.Security.Claims
 @layout MainLayout
 @attribute [Authorize]
 <PageTitle>Index</PageTitle>
 
+@if (_scoreResponse != null)
+{
+    <MudItem xs="12">
+        <MudPaper Elevation="0">
+            <MudText Align="Align.Center" Typo="Typo.h4">
+                <strong>Seu score é:</strong>
+            </MudText>
+            <MudText Align="Align.Center" Typo="Typo.h3">@_scoreResponse.value </MudText>
+            @if (_scoreResponse.value >= 500)
+            {
+                <MudText Align="Align.Center" Typo="Typo.h6">Você pode realizar empréstimos! :D</MudText>
+            }
+            else
+            {
+                <MudText Align="Align.Center" Typo="Typo.h6">Você não pode realizar empréstimos! :(</MudText>
+            }
+        </MudPaper>
+    </MudItem>
+
+    <MudItem xs="12">
+        <MudPaper Class="pa-4" Elevation="0" Outlined="true">
+            <MudText Align="Align.Start" Typo="Typo.body1">Conheça seu histórico!</MudText>
+            @foreach (var history in _scoreResponse.scoreHistories)
+            {
+                @if (history.occurrence.value > 0)
+                {
+                    <MudPaper Outlined="true" Elevation="0" Class="pa-4" Style="@($"background:{Colors.Green.Lighten1};")">
+                        <MudStack Row="true">
+                            <MudText Typo="Typo.body2">
+                                <strong>Motivo:</strong> @history.occurrence.description
+                            </MudText>
+                            <MudText Typo="Typo.body2">
+                                <strong>Pontuação:</strong> @history.occurrence.value
+                            </MudText>
+                        </MudStack>
+                    </MudPaper>
+                }
+                else
+                {
+                    <MudPaper Outlined="true" Elevation="0" Class="pa-4" Style="@($"background:{Colors.Orange.Lighten1};")">
+                        <MudStack Row="true">
+                            <MudText Typo="Typo.body2">
+                                <strong>Motivo:</strong> @history.occurrence.description
+                            </MudText>
+                            <MudText Typo="Typo.body2">
+                                <strong>Pontuação:</strong> @history.occurrence.value
+                            </MudText>
+                        </MudStack>
+                    </MudPaper>
+                }
+            }
+        </MudPaper>
+    </MudItem>
+}
+
 
 @code {
+    private ScoreResponse? _scoreResponse;
+    private string UserId;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var currentUser = await _authenticationManager.CurrentUser();
+        this.UserId = currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var scoreResult = await _scoreManager.GetScoreByUserId(UserId);
+
+
+        if (scoreResult.Succeeded)
+        {
+            _scoreResponse = scoreResult.Data;
+        }
+    }
 
 }

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using ScoreApi.Application.Occurrences.Contracts;
-using ScoreApi.Application.Scores.Contracts;
+using ScoreApi.Application.Score.Contracts;
 using ScoreApi.Infrastructure.Occurrences;
 using ScoreApi.Infrastructure.Scores;
 

@@ -13,7 +13,9 @@
 @using Client.Infrastructure.Managers.Identity.Authentication.Contracts
 @using Client.Infrastructure.Managers.Identity.Roles.Contracts
 @using Client.Infrastructure.Managers.Identity.Users
+@using Client.Infrastructure.Managers.Score.Contracts
 @inject IAuthenticationManager _authenticationManager
+@using Shared.Components
 @using Client.Shared
 @using global::Shared
 @using global::Shared.Requests
@@ -26,3 +28,4 @@
 @inject IDialogService _dialogService
 @inject IUserManager _userManager
 @inject IRoleManager _roleManager
+@inject IScoreManager _scoreManager;

@@ -39,7 +39,6 @@ namespace IdentityApi.Controllers.Identity
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Status 200 OK</returns>
-        [Authorize(Policy = Permissions.Users.View)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
         {

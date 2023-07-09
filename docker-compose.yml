@@ -63,6 +63,7 @@ services:
     depends_on:
       - financeapidatabase
     environment:
+      - ScoreApiUrl= http://scoreapi:80/api/
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__AppConnection=Host=financeapidatabase;Port=5432;Database=financeapidatabase;Username=postgres;Password=postgrespw;Pooling=true
       - ASPNETCORE_URLS=https://+:443;http://+:80

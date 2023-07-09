@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using ScoreApi.Application.Occurrences.Contracts;
-using ScoreApi.Application.Scores.Contracts;
+using ScoreApi.Application.Score.Contracts;
 using ScoreApi.Domain.Aggregates.ScoreAggregate.DomainEvents;
 using Shared.Logs.Services;
 

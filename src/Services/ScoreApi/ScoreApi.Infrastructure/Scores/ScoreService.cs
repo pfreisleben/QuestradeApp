@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ScoreApi.Application.Scores.Contracts;
+using ScoreApi.Application.Score.Contracts;
 using ScoreApi.Domain.Aggregates.ScoreAggregate;
 using ScoreApi.Domain.Aggregates.ScoreAggregate.DomainExceptions;
 using ScoreApi.Infrastructure.Persistence.AppDb;
@@ -54,10 +54,9 @@ public class ScoreService : IScoreService
 
     public async Task<CommandResult> AddScore(AddScoreRequest request)
     {
-        var userScore = new Score(request.UserId, 0);
+        var userScore = await _context.Scores.FirstOrDefaultAsync(x => x.UserId == request.UserId);
         userScore.AddScoreHistory(request.OccurrenceId);
 
-        await _context.AddAsync(userScore);
         await _context.SaveChangesAsync();
 
         return await CommandResult.SuccessAsync("Score adicionado com sucesso!");
@@ -87,11 +86,11 @@ public class ScoreService : IScoreService
         return await CommandResult<Score>.SuccessAsync(score);
     }
 
-    public async Task<CommandResult<bool>> CheckIfCanApplyToLoan(CheckIfCanApplyToLoanRequest request)
+    public async Task<CommandResult<bool>> CheckIfCanApplyToLoan(string userId)
     {
         var userScore = await _context.Scores
             .AsNoTracking()
-            .Where(x => x.UserId == request.UserId)
+            .Where(x => x.UserId == userId)
             .FirstOrDefaultAsync();
 
         if (userScore is null)

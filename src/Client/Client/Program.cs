@@ -32,6 +32,14 @@ builder.Services.AddHttpClient(HttpClientNames.IdentityApiWithoutAuthentication,
     client => client.BaseAddress =
         new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:IdentityApi")));
 
+builder.Services.AddHttpClient(HttpClientNames.ScoreApi,
+    client => client.BaseAddress =
+        new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:ScoreApi")));
+
+builder.Services.AddHttpClient(HttpClientNames.FinanceApi,
+    client => client.BaseAddress =
+        new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:FinanceApi")));
+
 builder.Services.AddHttpClient(HttpClientNames.IdentityApi,
     client => client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:IdentityApi")))
     .AddHttpMessageHandler<IdentityApiAuthenticationHandler>();

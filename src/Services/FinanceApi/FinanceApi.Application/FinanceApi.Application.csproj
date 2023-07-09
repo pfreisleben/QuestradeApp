@@ -13,11 +13,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Handlers\" />
+      <Folder Include="Loans\Services\" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
+      <ProjectReference Include="..\FinanceApi.Domain\FinanceApi.Domain.csproj" />
     </ItemGroup>
     
 </Project>

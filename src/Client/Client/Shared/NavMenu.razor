@@ -4,15 +4,18 @@
 @using MudBlazor
 
 <MudNavMenu Class="mud-width-full">
-    <UserCard />
+    <UserCard/>
     <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Inicio</MudNavLink>
+    <MudNavGroup Title="Empréstimos" Icon="@Icons.Material.Filled.Money" Expanded="false">
+        <MudNavLink Match="NavLinkMatch.All" OnClick="ViewLoans" Icon="@Icons.Material.Filled.AttachMoney" IconColor="Color.Success">Consultar</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" OnClick="AskForLoan" Icon="@Icons.Material.Filled.AddCard" IconColor="Color.Success">Solicitar</MudNavLink>
+    </MudNavGroup>
     @if (_canViewUsers || _canViewRoles)
     {
         <MudNavGroup Title="Administração" Icon="@Icons.Material.Filled.Settings" Expanded="false">
             @if (_canViewUsers)
             {
                 <MudNavLink Match="NavLinkMatch.All" Href="/identity/users" Icon="@Icons.Material.Filled.People" IconColor="Color.Success">Usuários</MudNavLink>
-
             }
             @if (_canViewRoles)
             {
@@ -40,4 +43,16 @@
     {
         _navigationManager.NavigateTo($"/identity/roles/");
     }
+
+    private void ViewLoans()
+    {
+        var userId = _currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
+        _navigationManager.NavigateTo($"/loans/{userId}");
+    }
+    
+    private void AskForLoan()
+    {
+        _navigationManager.NavigateTo($"/loans/add");
+    }
+
 }
