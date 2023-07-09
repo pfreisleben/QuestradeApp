@@ -5,7 +5,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED4F4E7A-24D
 		Client.Dockerfile = Client.Dockerfile
 		.dockerignore = .dockerignore
 		docker-compose.yml = docker-compose.yml
-		AuthenticationApi.DockerFile = AuthenticationApi.DockerFile
+		IdentityApi.DockerFile = IdentityApi.DockerFile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{86AC59FC-84D0-4390-AC83-F2CC55E796CA}"
@@ -18,15 +18,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Infrastructure", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{DEB65E66-FA70-439B-822B-8CC2EBB21A54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationApi", "src\Services\AuthenticationApi\AuthenticationApi\AuthenticationApi.csproj", "{5574EE17-E587-40E7-97DE-FAB938CFD36A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi", "src\Services\IdentityApi\IdentityApi\IdentityApi.csproj", "{5574EE17-E587-40E7-97DE-FAB938CFD36A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthenticationApi", "AuthenticationApi", "{8B10A686-BAF4-4779-B648-629C79168E0D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityApi", "IdentityApi", "{8B10A686-BAF4-4779-B648-629C79168E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationApi.Domain", "src\Services\AuthenticationApi\AuthenticationApi.Domain\AuthenticationApi.Domain.csproj", "{A4E871C3-4B51-4B44-B6D1-EFA1329583C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi.Domain", "src\Services\IdentityApi\IdentityApi.Domain\IdentityApi.Domain.csproj", "{A4E871C3-4B51-4B44-B6D1-EFA1329583C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationApi.Infrastructure", "src\Services\AuthenticationApi\AuthenticationApi.Infrastructure\AuthenticationApi.Infrastructure.csproj", "{C5ED409D-90FF-4845-A0DC-213095975937}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi.Infrastructure", "src\Services\IdentityApi\IdentityApi.Infrastructure\IdentityApi.Infrastructure.csproj", "{C5ED409D-90FF-4845-A0DC-213095975937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthenticationApi.Application", "src\Services\AuthenticationApi\AuthenticationApi.Application\AuthenticationApi.Application.csproj", "{27FAC3E1-0E72-4416-9622-C7D2446E44F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityApi.Application", "src\Services\IdentityApi\IdentityApi.Application\IdentityApi.Application.csproj", "{27FAC3E1-0E72-4416-9622-C7D2446E44F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

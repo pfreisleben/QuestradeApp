@@ -28,19 +28,19 @@ builder.Services.AddMudServices(config =>
 
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddHttpClient(HttpClientNames.AuthenticationApiWithoutAuthentication,
+builder.Services.AddHttpClient(HttpClientNames.IdentityApiWithoutAuthentication,
     client => client.BaseAddress =
-        new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:AuthenticationApi")));
+        new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:IdentityApi")));
 
-builder.Services.AddHttpClient(HttpClientNames.AuthenticationApi,
-    client => client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:AuthenticationApi")))
-    .AddHttpMessageHandler<ApiAuthenticationHandler>();
+builder.Services.AddHttpClient(HttpClientNames.IdentityApi,
+    client => client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("ApiEndpoints:IdentityApi")))
+    .AddHttpMessageHandler<IdentityApiAuthenticationHandler>();
 
 
 
 builder.Services.AddManagers();
 builder.Services.AddClientAuthorization();
-builder.Services.AddTransient<ApiAuthenticationHandler>();
+builder.Services.AddTransient<IdentityApiAuthenticationHandler>();
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
 
 await builder.Build().RunAsync();

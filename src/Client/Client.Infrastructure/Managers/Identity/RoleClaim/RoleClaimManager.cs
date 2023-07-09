@@ -14,7 +14,7 @@ namespace Client.Infrastructure.Managers.Identity.RoleClaim
 
         public RoleClaimManager(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient(HttpClientNames.AuthenticationApi);
+            _httpClient = httpClientFactory.CreateClient(HttpClientNames.IdentityApi);
         }
 
         public async Task<CommandResult<string>> DeleteAsync(string id)

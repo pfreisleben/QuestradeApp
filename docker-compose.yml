@@ -1,7 +1,7 @@
 version: '3.4'
 
 volumes:
-  authenticationapi:
+  identityapi:
 
 networks:
   appnetwork:
@@ -16,11 +16,11 @@ services:
     ports:
       - "8080:80"
   
-  authenticationapi:
-    image: ${DOCKER_REGISTRY-}authenticationapi
+  identityapi:
+    image: ${DOCKER_REGISTRY-}identityapi
     build:
       context: .
-      dockerfile: AuthenticationApi.DockerFile
+      dockerfile: IdentityApi.DockerFile
     depends_on:
       - authenticationapidatabase
     environment:
@@ -42,7 +42,7 @@ services:
     ports:
       - "5523:5432"
     volumes:
-      - authenticationapi:/var/lib/postgresql
+      - identityapi:/var/lib/postgresql
     networks:
       - appnetwork
     restart:

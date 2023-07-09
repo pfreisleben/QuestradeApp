@@ -2,6 +2,6 @@
 
 public static class HttpClientNames
 {
-    public const string AuthenticationApi = nameof(AuthenticationApi);
-    public const string AuthenticationApiWithoutAuthentication = nameof(AuthenticationApiWithoutAuthentication);
+    public const string IdentityApi = nameof(IdentityApi);
+    public const string IdentityApiWithoutAuthentication = nameof(IdentityApiWithoutAuthentication);
 }

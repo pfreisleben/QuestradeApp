@@ -14,7 +14,7 @@ namespace Client.Infrastructure.Managers.Identity.Users
 
         public UserManager(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient(HttpClientNames.AuthenticationApi);
+            _httpClient = httpClientFactory.CreateClient(HttpClientNames.IdentityApi);
         }
 
         public async Task<ICommandResult> UpdateUserStatusAsync(UpdateUserStatusRequest request)

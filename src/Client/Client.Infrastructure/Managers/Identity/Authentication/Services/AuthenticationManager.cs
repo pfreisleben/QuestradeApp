@@ -22,8 +22,8 @@ public class AuthenticationManager : IAuthenticationManager
         AuthenticationStateProvider authenticationStateProvider,
         ILocalStorageService localStorage)
     {
-        _httpClient = httpClientFactory.CreateClient(HttpClientNames.AuthenticationApi);
-        _httpClientWithoutAuthentication = httpClientFactory.CreateClient(HttpClientNames.AuthenticationApiWithoutAuthentication);
+        _httpClient = httpClientFactory.CreateClient(HttpClientNames.IdentityApi);
+        _httpClientWithoutAuthentication = httpClientFactory.CreateClient(HttpClientNames.IdentityApiWithoutAuthentication);
         _authenticationStateProvider = authenticationStateProvider;
         _localStorage = localStorage;
     }
