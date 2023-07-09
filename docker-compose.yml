@@ -35,8 +35,9 @@ services:
     networks:
       - appnetwork
       
+      
   scoreapi:
-    image: ${DOCKER_REGISTRY-}identityapi
+    image: ${DOCKER_REGISTRY-}scoreapi
     build:
       context: .
       dockerfile: ScoreApi.DockerFile

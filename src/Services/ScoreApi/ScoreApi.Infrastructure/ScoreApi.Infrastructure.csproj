@@ -25,7 +25,6 @@
 
     <ItemGroup>
       <Folder Include="Persistence\AppDb\Configurations\" />
-      <Folder Include="Persistence\AppDb\Seed\" />
     </ItemGroup>
 
 </Project>
