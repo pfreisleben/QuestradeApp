@@ -34,6 +34,25 @@ services:
       - "5522:80"
     networks:
       - appnetwork
+      
+  scoreapi:
+    image: ${DOCKER_REGISTRY-}identityapi
+    build:
+      context: .
+      dockerfile: ScoreApi.DockerFile
+    depends_on:
+      - scoreapidatabase
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__AppConnection=Host=scoreapidatabase;Port=5432;Database=scoreapidatabase;Username=postgres;Password=postgrespw;Pooling=true
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=9873
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
+      - "5525:443"
+      - "5526:80"
+    networks:
+      - appnetwork
   
   identityapidatabase:
     image: postgres:latest
@@ -41,6 +60,19 @@ services:
       - POSTGRES_PASSWORD=postgrespw
     ports:
       - "5523:5432"
+    volumes:
+      - identityapi:/var/lib/postgresql
+    networks:
+      - appnetwork
+    restart:
+      always
+    
+  scoreapidatabase:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - "5524:5432"
     volumes:
       - identityapi:/var/lib/postgresql
     networks:

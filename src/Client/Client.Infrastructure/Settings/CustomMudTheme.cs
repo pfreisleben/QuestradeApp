@@ -16,7 +16,7 @@ namespace Client.Infrastructure.Settings
         {
             Palette = new Palette
             {
-                AppbarBackground = Colors.BlueGrey.Darken1
+                AppbarBackground = Colors.Shades.White
             },
             Typography = typography
         };
