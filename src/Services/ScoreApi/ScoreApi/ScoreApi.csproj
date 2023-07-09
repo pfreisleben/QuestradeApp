@@ -21,8 +21,5 @@
       <ProjectReference Include="..\ScoreApi.Infrastructure\ScoreApi.Infrastructure.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Controllers\" />
-    </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ public static class DependencyInjectionExtensions
 {
     public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddInfrastructureLayer();
+        services.AddInfrastructureLayer(configuration);
         services.AddInfrastructureMappings();
         services.AddDatabase(configuration);
         services.AddIdentityServices(configuration);

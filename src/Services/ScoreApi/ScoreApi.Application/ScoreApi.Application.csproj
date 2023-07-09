@@ -14,13 +14,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
+      <ProjectReference Include="..\ScoreApi.Domain\ScoreApi.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Handlers\" />
     </ItemGroup>
 </Project>

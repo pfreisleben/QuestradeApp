@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ScoreApi.Infrastructure.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,6 +22,20 @@ namespace ScoreApi.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Occurrences", x => x.Id);
                     table.UniqueConstraint("AK_Occurrences_Description", x => x.Description);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Occurrences",
+                columns: new[] { "Id", "Description", "Value" },
+                values: new object[,]
+                {
+                    { 1, "Conta paga antes do vencimento", 20 },
+                    { 2, "Conta paga depois do vencimento", -20 },
+                    { 3, "Finalizou o pagamento do empréstimo", 60 },
+                    { 4, "Atrasou a parcela do empréstimo", -40 },
+                    { 5, "Contratou um empréstimo", -50 },
+                    { 6, "Cadastrou valor da renda mensal", 30 },
+                    { 7, "Usuário foi criado", 500 }
                 });
         }
 

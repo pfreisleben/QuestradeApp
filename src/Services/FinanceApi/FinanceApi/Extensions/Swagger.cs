@@ -9,7 +9,7 @@ namespace FinanceApi.Extensions
         {
             services.AddSwaggerGen(setup =>
             {
-                setup.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Score API", Version = "v1" });
+                setup.SwaggerDoc(name: "v1", new OpenApiInfo { Title = "Finance API", Version = "v1" });
 
                 var jwtSecurityScheme = new OpenApiSecurityScheme
                 {

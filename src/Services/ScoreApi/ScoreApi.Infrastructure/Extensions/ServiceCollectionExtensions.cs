@@ -1,5 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using ScoreApi.Application.Occurrences.Contracts;
+using ScoreApi.Application.Scores.Contracts;
+using ScoreApi.Infrastructure.Occurrences;
+using ScoreApi.Infrastructure.Scores;
 
 namespace ScoreApi.Infrastructure.Extensions;
 
@@ -8,6 +12,8 @@ public static class ServiceCollectionExtensions
 
     public static void AddInfrastructureLayer(this IServiceCollection services)
     {
+        services.AddScoped<IOccurrenceService, OccurrenceService>();
+        services.AddScoped<IScoreService, ScoreService>();
 
         services.AddMediatR(cfg =>
         {

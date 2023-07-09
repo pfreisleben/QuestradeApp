@@ -13,5 +13,7 @@ namespace IdentityApi.Domain.Entites
         public AppUser()
         {
         }
+        
+        
     }
 }

@@ -11,8 +11,8 @@ using ScoreApi.Infrastructure.Persistence.AppDb;
 namespace ScoreApi.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230709134658_Init2")]
-    partial class Init2
+    [Migration("20230709150857_AddScoreDomain")]
+    partial class AddScoreDomain
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,51 @@ namespace ScoreApi.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ScoreApi.Domain.Aggregates.ScoreAggregate.Score", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("UserId");
+
+                    b.ToTable("Scores");
+                });
+
+            modelBuilder.Entity("ScoreApi.Domain.Aggregates.ScoreAggregate.ScoreHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OccurrenceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ScoreId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurrenceId");
+
+                    b.HasIndex("ScoreId");
+
+                    b.ToTable("ScoreHistory");
+                });
 
             modelBuilder.Entity("ScoreApi.Domain.Entities.Occurrence", b =>
                 {
@@ -81,7 +126,35 @@ namespace ScoreApi.Infrastructure.Migrations
                             Id = 6,
                             Description = "Cadastrou valor da renda mensal",
                             Value = 30
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Usuário foi criado",
+                            Value = 500
                         });
+                });
+
+            modelBuilder.Entity("ScoreApi.Domain.Aggregates.ScoreAggregate.ScoreHistory", b =>
+                {
+                    b.HasOne("ScoreApi.Domain.Entities.Occurrence", "Occurrence")
+                        .WithMany()
+                        .HasForeignKey("OccurrenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScoreApi.Domain.Aggregates.ScoreAggregate.Score", null)
+                        .WithMany("ScoreHistories")
+                        .HasForeignKey("ScoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Occurrence");
+                });
+
+            modelBuilder.Entity("ScoreApi.Domain.Aggregates.ScoreAggregate.Score", b =>
+                {
+                    b.Navigation("ScoreHistories");
                 });
 #pragma warning restore 612, 618
         }

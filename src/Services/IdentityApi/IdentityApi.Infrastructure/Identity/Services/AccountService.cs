@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using IdentityApi.Application.Base;
 using IdentityApi.Application.Services.Identity.Contracts;
+using IdentityApi.Domain.DomainEvents;
 using IdentityApi.Domain.Entites;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -18,14 +20,16 @@ namespace IdentityApi.Infrastructure.Identity.Services
         private readonly IConfiguration _configuration;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IMediator _mediator;
 
         public AccountService(ILogServices logServices, IConfiguration configuration,
             RoleManager<AppRole> roleManager,
-            UserManager<AppUser> userManager) : base(logServices)
+            UserManager<AppUser> userManager, IMediator mediator) : base(logServices)
         {
             _configuration = configuration;
             _roleManager = roleManager;
             _userManager = userManager;
+            _mediator = mediator;
         }
 
         public async Task<CommandResult<string>> Login(LoginRequest login)
@@ -92,12 +96,14 @@ namespace IdentityApi.Infrastructure.Identity.Services
         {
             var username = $"{model.Nome}.{model.Sobrenome}".ToLower();
             var newUser = new AppUser
-                { UserName = username, Email = model.Email, Nome = model.Nome, Sobrenome = model.Sobrenome };
+                { UserName = username, Email = model.Email, Nome = model.Nome, Sobrenome = model.Sobrenome, Ativo = true};
 
             var result = await _userManager.CreateAsync(newUser, model.Senha);
 
             if (result.Succeeded)
             {
+                var userCreatedEvent = new UserCreatedDomainEvent(newUser.Id);
+                await _mediator.Publish(userCreatedEvent);
                 return await CommandResult.SuccessAsync("Registro realizado com sucesso!");
             }
 

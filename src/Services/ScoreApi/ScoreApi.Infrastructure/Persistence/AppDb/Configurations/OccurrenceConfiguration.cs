@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ScoreApi.Domain.Aggregates.ScoreAggregate;
 using ScoreApi.Domain.Entities;
 
 namespace ScoreApi.Infrastructure.Persistence.AppDb.Configurations;
@@ -20,6 +21,10 @@ public class OccurrenceConfiguration : IEntityTypeConfiguration<Occurrence>
             .IsRequired()
             .HasMaxLength(100);
 
+        entity.HasMany<ScoreHistory>()
+            .WithOne(x => x.Occurrence)
+            .HasForeignKey(x => x.OccurrenceId);
+
 
         entity.HasData(
             new Occurrence(1, 20, "Conta paga antes do vencimento"),
@@ -27,7 +32,8 @@ public class OccurrenceConfiguration : IEntityTypeConfiguration<Occurrence>
             new Occurrence(3, 60, "Finalizou o pagamento do empréstimo"),
             new Occurrence(4, -40, "Atrasou a parcela do empréstimo"),
             new Occurrence(5, -50, "Contratou um empréstimo"),
-            new Occurrence(6, 30, "Cadastrou valor da renda mensal")
-            );
+            new Occurrence(6, 30, "Cadastrou valor da renda mensal"),
+            new Occurrence(7, 500, "Usuário foi criado")
+        );
     }
 }
