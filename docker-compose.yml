@@ -50,6 +50,24 @@ services:
       - ASPNETCORE_Kestrel__Certificates__Default__Password=9873
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
+      - "5523:443"
+      - "5524:80"
+    networks:
+      - appnetwork
+  financeapi:
+    image: ${DOCKER_REGISTRY-}financeapi
+    build:
+      context: .
+      dockerfile: FinanceApi.DockerFile
+    depends_on:
+      - financeapidatabase
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__AppConnection=Host=financeapidatabase;Port=5432;Database=financeapidatabase;Username=postgres;Password=postgrespw;Pooling=true
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=9873
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    ports:
       - "5525:443"
       - "5526:80"
     networks:
@@ -60,7 +78,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgrespw
     ports:
-      - "5523:5432"
+      - "5527:5432"
     volumes:
       - identityapi:/var/lib/postgresql
     networks:
@@ -73,7 +91,20 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgrespw
     ports:
-      - "5524:5432"
+      - "5528:5432"
+    volumes:
+      - identityapi:/var/lib/postgresql
+    networks:
+      - appnetwork
+    restart:
+      always
+    
+  financeapidatabase:
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=postgrespw
+    ports:
+      - "5529:5432"
     volumes:
       - identityapi:/var/lib/postgresql
     networks:

@@ -1,10 +1,10 @@
 ﻿using MediatR;
 
-namespace ScoreApi.Domain;
+namespace FinanceApi.Domain.SeedWork;
 
 public abstract class Entity
 {
-    public int Id { get; private set; }
+    public int Id { get; protected set; }
     
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();

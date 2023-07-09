@@ -1,9 +1,8 @@
-﻿using MediatR;
-using ScoreApi.Domain;
-using ScoreApi.Domain.SeedWork;
-using ScoreApi.Infrastructure.Persistence.AppDb;
+﻿using FinanceApi.Domain.SeedWork;
+using FinanceApi.Infrastructure.Persistence.AppDb;
+using MediatR;
 
-namespace ScoreApi.Infrastructure.Extensions;
+namespace FinanceApi.Infrastructure.Extensions;
 
 static class MediatorExtension
 {

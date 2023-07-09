@@ -19,13 +19,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ScoreApi.Application\ScoreApi.Application.csproj" />
-      <ProjectReference Include="..\ScoreApi.Domain\ScoreApi.Domain.csproj" />
+      <ProjectReference Include="..\FinanceApi.Application\FinanceApi.Application.csproj" />
+      <ProjectReference Include="..\FinanceApi.Domain\FinanceApi.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Migrations\" />
+      <Folder Include="Persistence\AppDb\Configurations\" />
     </ItemGroup>
-
 
 </Project>

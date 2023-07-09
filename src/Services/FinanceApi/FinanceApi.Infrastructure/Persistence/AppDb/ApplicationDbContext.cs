@@ -1,17 +1,15 @@
 ﻿using System.Reflection;
+using FinanceApi.Infrastructure.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ScoreApi.Domain.Entities;
-using ScoreApi.Infrastructure.Extensions;
 
-namespace ScoreApi.Infrastructure.Persistence.AppDb
+namespace FinanceApi.Infrastructure.Persistence.AppDb
 {
     public class ApplicationDbContext : DbContext
     {
         private readonly IMediator _mediator;
 
 
-        public DbSet<Occurrence> Occurrences { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IMediator mediator) : base(options)
         {
             _mediator = mediator;

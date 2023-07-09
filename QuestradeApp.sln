@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED4F4E7A-24D
 		docker-compose.yml = docker-compose.yml
 		IdentityApi.DockerFile = IdentityApi.DockerFile
 		ScoreApi.DockerFile = ScoreApi.DockerFile
+		FinanceApi.DockerFile = FinanceApi.DockerFile
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{86AC59FC-84D0-4390-AC83-F2CC55E796CA}"
@@ -39,6 +40,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreApi.Domain", "src\Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreApi.Infrastructure", "src\Services\ScoreApi\ScoreApi.Infrastructure\ScoreApi.Infrastructure.csproj", "{F990B25D-6EA1-4FD2-9E7E-1DD137E66CFF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FinanceApi", "FinanceApi", "{2DFCD3BF-6A25-4E66-83DE-77E45B4517C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceApi", "src\Services\FinanceApi\FinanceApi\FinanceApi.csproj", "{EEFE8219-801E-4397-A853-1DD5B6E93E6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceApi.Application", "src\Services\FinanceApi\FinanceApi.Application\FinanceApi.Application.csproj", "{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceApi.Domain", "src\Services\FinanceApi\FinanceApi.Domain\FinanceApi.Domain.csproj", "{1917D542-6E2E-4D4B-A030-A86E6402A8E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceApi.Infrastructure", "src\Services\FinanceApi\FinanceApi.Infrastructure\FinanceApi.Infrastructure.csproj", "{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +71,11 @@ Global
 		{7A700FD8-0D1B-427C-B19E-AC745E27155B} = {DBCAEA6D-5801-4644-8F30-4E2D746A101C}
 		{05950844-AD23-4020-BC2E-CD4C41C44596} = {DBCAEA6D-5801-4644-8F30-4E2D746A101C}
 		{F990B25D-6EA1-4FD2-9E7E-1DD137E66CFF} = {DBCAEA6D-5801-4644-8F30-4E2D746A101C}
+		{2DFCD3BF-6A25-4E66-83DE-77E45B4517C8} = {86AC59FC-84D0-4390-AC83-F2CC55E796CA}
+		{EEFE8219-801E-4397-A853-1DD5B6E93E6A} = {2DFCD3BF-6A25-4E66-83DE-77E45B4517C8}
+		{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6} = {2DFCD3BF-6A25-4E66-83DE-77E45B4517C8}
+		{1917D542-6E2E-4D4B-A030-A86E6402A8E5} = {2DFCD3BF-6A25-4E66-83DE-77E45B4517C8}
+		{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15} = {2DFCD3BF-6A25-4E66-83DE-77E45B4517C8}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C2FC4C1E-2025-4BFB-B872-545FC0386FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -106,5 +122,21 @@ Global
 		{F990B25D-6EA1-4FD2-9E7E-1DD137E66CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F990B25D-6EA1-4FD2-9E7E-1DD137E66CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F990B25D-6EA1-4FD2-9E7E-1DD137E66CFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEFE8219-801E-4397-A853-1DD5B6E93E6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEFE8219-801E-4397-A853-1DD5B6E93E6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEFE8219-801E-4397-A853-1DD5B6E93E6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEFE8219-801E-4397-A853-1DD5B6E93E6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84C68201-E4E6-46D4-BBA7-856DDE2AE9A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1917D542-6E2E-4D4B-A030-A86E6402A8E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1917D542-6E2E-4D4B-A030-A86E6402A8E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1917D542-6E2E-4D4B-A030-A86E6402A8E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1917D542-6E2E-4D4B-A030-A86E6402A8E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3E60AF-8F49-4088-95C9-8FD1DD87CA15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
