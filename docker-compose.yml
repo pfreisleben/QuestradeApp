@@ -25,6 +25,7 @@ services:
       - identityapidatabase
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ScoreApiUrl=http://scoreapi:80/api/
       - ConnectionStrings__AppConnection=Host=identityapidatabase;Port=5432;Database=identityapidatabase;Username=postgres;Password=postgrespw;Pooling=true
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_Kestrel__Certificates__Default__Password=9873

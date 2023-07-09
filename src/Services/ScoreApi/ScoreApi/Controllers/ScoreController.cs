@@ -25,11 +25,21 @@ public class AccountController : ControllerBase
             return Ok(retorno);
         return BadRequest(retorno);
     }
-    
+
     [HttpPost("InitializeUserScore")]
     public async Task<ActionResult<CommandResult>> Login([FromBody] InitializeUserScoreRequest request)
     {
         var retorno = await _scoreService.InitializeUserScore(request);
+
+        if (retorno.Succeeded)
+            return Ok(retorno);
+        return BadRequest(retorno);
+    }
+
+    [HttpGet("GetUserScode/{userId}")]
+    public async Task<ActionResult<CommandResult>> Login(string userId)
+    {
+        var retorno = await _scoreService.GetScoreByUserId(userId);
 
         if (retorno.Succeeded)
             return Ok(retorno);

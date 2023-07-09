@@ -28,6 +28,17 @@ public class ScoreService : IScoreService
         return await CommandResult.SuccessAsync("Score adicionado com sucesso!");
     }
 
+    public async Task<CommandResult<Score>> GetScoreByUserId(string userId)
+    {
+        var userScore = await _context.Scores.Where(x => x.UserId == userId)
+            .AsNoTracking()
+            .Include(x => x.ScoreHistories)
+            .ThenInclude(x => x.Occurrence)
+            .FirstOrDefaultAsync();
+
+        return await CommandResult<Score>.SuccessAsync(userScore);
+    }
+
     public async Task<CommandResult> UpdateScoreHistory(UpdateScoreRequest request)
     {
         var userScore = await _context.Scores.Where(x => x.UserId == request.UserId).FirstOrDefaultAsync();

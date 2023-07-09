@@ -7,6 +7,7 @@ namespace ScoreApi.Application.Scores.Contracts;
 public interface IScoreService
 {
     Task<CommandResult> InitializeUserScore(InitializeUserScoreRequest request);
+    Task<CommandResult<Score>> GetScoreByUserId(string userId);
     Task<CommandResult> UpdateScoreHistory(UpdateScoreRequest request);
     Task<CommandResult> AddScore(AddScoreRequest request);
     Task<CommandResult> UpdateUserScoreValue(string userId, int valueToBeAdded);

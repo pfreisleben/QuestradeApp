@@ -103,7 +103,7 @@ namespace IdentityApi.Infrastructure.Identity.Services
             if (result.Succeeded)
             {
                 var userCreatedEvent = new UserCreatedDomainEvent(newUser.Id);
-                await _mediator.Publish(userCreatedEvent);
+                _mediator.Publish(userCreatedEvent);
                 return await CommandResult.SuccessAsync("Registro realizado com sucesso!");
             }
 
