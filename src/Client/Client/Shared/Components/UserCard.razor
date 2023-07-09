@@ -1,0 +1,37 @@
+﻿@using System.Security.Claims
+
+<MudCard Elevation="0" Square="true">
+    <MudCardHeader>
+        <CardHeaderAvatar>
+            <MudAvatar Color="Color.Secondary">@Email.ToUpper()[0]</MudAvatar>
+        </CardHeaderAvatar>
+        <CardHeaderContent>
+            <MudText Typo="Typo.caption">@Email</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+
+</MudCard>
+
+
+@code {
+    private string Email { get; set; } = "U";
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadDataAsync();
+        }
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        string userEmail = user.FindFirstValue(ClaimTypes.Name);
+        Email = userEmail;
+        StateHasChanged();
+    }
+}

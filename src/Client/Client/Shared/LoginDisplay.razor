@@ -1,0 +1,60 @@
+﻿@using Client.Shared.Components
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Security.Claims;
+@using Client.Infrastructure.Managers.Identity.Users;
+
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu Dense="true" Class="ml-4" AnchorOrigin="Origin.BottomCenter">
+            <ActivatorContent>
+                <MudAvatar Color="Color.Secondary">@Email.ToUpper()[0]</MudAvatar>
+            </ActivatorContent>
+            <ChildContent>
+                <UserCard />
+                <MudDivider Class="mb-2" />
+                <MudListItem Text="Logout" OnClick="BeginLogout" Icon="@Icons.Material.Filled.Logout" />
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton Href="/login" Size="Size.Small" Class="mr-3" Variant="Variant.Filled" StartIcon="@Icons.Filled.Login" Color="Color.Success">Entrar</MudButton>
+    </NotAuthorized>
+    <Authorizing>
+        <MudText Class="mr-3">Autenticando...</MudText>
+    </Authorizing>
+</AuthorizeView>
+
+@code {
+    private string Email { get; set; } = "U";
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadDataAsync();
+        }
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var state = await _stateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+        if (user == null) return;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            string userEmail = user.FindFirstValue(ClaimTypes.Name);
+            this.Email = userEmail;
+        }
+
+
+        StateHasChanged();
+    }
+
+    private void BeginLogout(MouseEventArgs args)
+    {
+        _navigationManager.NavigateTo("/logout");
+    }
+
+}

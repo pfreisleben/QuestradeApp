@@ -1,0 +1,106 @@
+@page "/login"
+@using MudBlazor
+@layout EmptyLayout
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="absolute" Style="top:50%;left:50%;margin-right:-50%;transform:translate(-50%, -50%)">
+    <MudPaper Square="false" Outlined="true" Class="pa-4" Style="border-top: 5px solid #05CC12">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudContainer Class="d-flex align-center justify-center">
+                    <MudImage Width="200" Height="120" Src="images/logo.png"></MudImage>
+                </MudContainer>
+            </MudItem>
+            <MudItem xs="12">
+                <MudContainer Class="d-flex justify-center">
+                    <h2>Autentique-se</h2>
+                </MudContainer>
+            </MudItem>
+            <MudItem xs="12">
+                <MudForm @bind-IsValid="@bindIsValid" @bind-Model="@loginModel">
+                    <MudFocusTrap>
+                        <MudTextField Label="Usuário" Required="true" OnlyValidateIfDirty="true" Variant="Variant.Outlined"
+                                      RequiredError="Usuário é necessário." @bind-Value="loginModel.Usuario"
+                                       />
+
+                        <MudTextField Label="Senha" @bind-Value="loginModel.Senha" Required="true" InputType="PasswordInput" Variant="Variant.Outlined"
+                                      RequiredError="Senha é necessária." OnlyValidateIfDirty="true" Adornment="Adornment.End"
+                                      AdornmentIcon="@PasswordInputIcon" AdornmentAriaLabel="Mostrar senha" OnAdornmentClick="PasswordIconClick" />
+                    </MudFocusTrap>
+                </MudForm>
+
+            </MudItem>
+            @if (isValidatingSubmit)
+            {
+                <MudContainer Class="mt-2 d-flex align-items-center justify-center">
+                    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+                </MudContainer>
+            }
+            <MudItem xs="12">
+                <MudButton Disabled="@(!bindIsValid)" OnClick="HandleLogin" Variant="Variant.Filled" FullWidth="true" Class="green accent-3 rounded-pill"><MudText Typo="Typo.h6" Class="shades-text text-white">Login</MudText></MudButton>
+            </MudItem>
+            <MudItem xs="12">
+                <MudContainer>
+                    <MudLink Href="/register"><MudText Align="Align.Center" Class="blue-grey-text text-darken-1">Registrar-se</MudText></MudLink>
+                </MudContainer>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+</MudContainer>
+
+
+
+
+
+@code {
+    bool bindIsValid;
+    private LoginRequest loginModel = new LoginRequest();
+    bool isShow;
+    bool isValidatingSubmit;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    private async Task HandleLogin()
+    {
+        isValidatingSubmit = true;
+        _snackBar.Clear();
+
+        if (!bindIsValid)
+        {
+            isValidatingSubmit = false;
+            return;
+        }
+
+        var result = await _authenticationManager.Login(loginModel);
+        if (result.Succeeded)
+            _navigationManager.NavigateTo("/");
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                _snackBar.Add(error, Severity.Error);
+            }
+        }
+
+
+        isValidatingSubmit = false;
+
+    }
+
+    void PasswordIconClick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+}

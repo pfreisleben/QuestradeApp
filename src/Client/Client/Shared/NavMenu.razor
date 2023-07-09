@@ -1,0 +1,43 @@
+﻿@using System.Security.Claims;
+@using Client.Infrastructure.Managers.Identity.Users;
+@using global::Shared.Constants
+@using MudBlazor
+
+<MudNavMenu Class="mud-width-full">
+    <UserCard />
+    <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Inicio</MudNavLink>
+    @if (_canViewUsers || _canViewRoles)
+    {
+        <MudNavGroup Title="Administração" Icon="@Icons.Material.Filled.Settings" Expanded="false">
+            @if (_canViewUsers)
+            {
+                <MudNavLink Match="NavLinkMatch.All" Href="/identity/users" Icon="@Icons.Material.Filled.People" IconColor="Color.Success">Usuários</MudNavLink>
+
+            }
+            @if (_canViewRoles)
+            {
+                <MudNavLink OnClick="@(() => ManageRoles())" Icon="@Icons.Material.Filled.Security" IconColor="Color.Info">Roles</MudNavLink>
+            }
+        </MudNavGroup>
+    }
+</MudNavMenu>
+
+@code {
+
+    private bool _canViewRoles;
+    private bool _canViewUsers;
+    private ClaimsPrincipal _currentUser;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentUser = await _authenticationManager.CurrentUser();
+        _canViewRoles = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.View)).Succeeded;
+        _canViewUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.View)).Succeeded;
+    }
+
+    private void ManageRoles()
+    {
+        _navigationManager.NavigateTo($"/identity/roles/");
+    }
+}

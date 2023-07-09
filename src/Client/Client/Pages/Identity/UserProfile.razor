@@ -1,0 +1,132 @@
+﻿@page "/user-profile/{Id}"
+@using Blazored.FluentValidation
+@layout MainLayout
+
+<AppTitle Title="@Title" Description="@Description"/>
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+}
+else
+{
+    <MudGrid>
+        <AuthorizeView Roles="Admin">
+            <MudItem xs="12" sm="12" md="12">
+                <MudCard Elevation="25">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.body1">Configurações do administrador</MudText>
+                            <MudText Typo="Typo.body2">Somente administradores podem ver essa seção.</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent Class="pa-46" Style="padding:26px!important">
+                        <MudGrid>
+                            <MudCheckBox @bind-Checked="@_ativo" Label="Ativo?" Color="Color.Primary"></MudCheckBox>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="AtualizarStatusUsuario" ButtonType="ButtonType.Submit">Salvar alterações</MudButton>
+                        </MudGrid>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </AuthorizeView>
+        <MudItem xs="12" sm="8" md="9">
+            <EditForm Model="@UserModel" OnValidSubmit="SaveAsync">
+                <FluentValidationValidator @ref="_fluentValidationValidator"/>
+                <MudCard Elevation="25">
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText>Dados do perfil</MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        <MudGrid>
+                            <MudItem xs="12" md="6">
+                                <MudTextField For="@(() => UserModel.Nome)" @bind-Value="UserModel.Nome" Label="Nome"/>
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField For="@(() => UserModel.Sobrenome)" @bind-Value="UserModel.Sobrenome" Label="Sobrenome"/>
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">Salvar</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </EditForm>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Description { get; set; }
+
+    private FluentValidationValidator _fluentValidationValidator;
+    private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
+
+    private bool _ativo;
+    private string _email;
+    public UserRequest UserModel { get; set; } = new();
+
+    private bool _loaded;
+
+    private async Task AtualizarStatusUsuario()
+    {
+        var request = new UpdateUserStatusRequest { AtivarUsuario = _ativo, IdUsuario = Id };
+        var result = await _userManager.UpdateUserStatusAsync(request);
+        if (result.Succeeded)
+        {
+            _snackBar.Add("Status do usuário atualizado!", Severity.Success);
+            _navigationManager.NavigateTo("/identity/users");
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                _snackBar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    private async Task SaveAsync()
+    {
+        var result = await _userManager.UpdateUserAsync(UserModel);
+        if (result.Succeeded)
+        {
+            _snackBar.Add("Usuário atualizado!", Severity.Success);
+            _navigationManager.NavigateTo("/identity/users");
+        }
+        else
+        {
+            foreach (var error in result.Messages)
+            {
+                _snackBar.Add(error, Severity.Error);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = Id;
+        var result = await _userManager.GetAsync(userId);
+        if (result.Succeeded)
+        {
+            _ativo = result.Data.Ativo;
+            UserModel.Id = Id;
+            UserModel.Nome = result.Data.Nome;
+            UserModel.Sobrenome = result.Data.Sobrenome;
+
+            Title = $"{UserModel.Nome} {UserModel.Sobrenome} Perfil";
+            Description = result.Data.Email;
+        }
+
+        _loaded = true;
+    }
+
+}

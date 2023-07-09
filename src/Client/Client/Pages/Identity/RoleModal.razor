@@ -1,0 +1,79 @@
+﻿@using Blazored.FluentValidation;
+@using Client.Infrastructure.Managers.Identity.Roles.Contracts
+
+<EditForm Model="@RoleModel" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator @ref="_fluentValidationValidator" />
+    <MudDialog>
+        <TitleContent>
+            @{
+                if (RoleModel.Id == null)
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                        Adicionar Role
+                    </MudText>
+                }
+                else
+                {
+                    <MudText Typo="Typo.h6">
+                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+                       Atualizar Role
+                    </MudText>
+                }
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudTextField For="@(() => RoleModel.Id)" @bind-Value="RoleModel.Id" Label="Id Role" Disabled />
+            <MudTextField For="@(() => RoleModel.Name)" @bind-Value="RoleModel.Name" Label="Nome Role" />
+            <MudTextField For="@(() => RoleModel.Description)" @bind-Value="RoleModel.Description" Label="Descrição" />
+        </DialogContent>
+        <DialogActions>
+            <MudButton Variant="Variant.Filled" OnClick="Cancel">Cancelar</MudButton>
+            @{
+                if (RoleModel.Id == null)
+                {
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">Salvar Role</MudButton>
+                }
+                else
+                {
+                    <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">Atualizar Role</MudButton>
+                }
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>
+
+@code {
+    [Inject] private IRoleManager RoleManager { get; set; }
+
+    [Parameter] public RoleRequest RoleModel { get; set; } = new();
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    private FluentValidationValidator _fluentValidationValidator;
+    private bool Validated => _fluentValidationValidator.Validate(options => { options.IncludeAllRuleSets(); });
+
+    public void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+
+
+
+    private async Task SaveAsync()
+    {
+        var response = await RoleManager.SaveAsync(RoleModel);
+        if (response.Succeeded)
+        {
+            _snackBar.Add(response.Messages[0], Severity.Success);
+            MudDialog.Close();
+        }
+        else
+        {
+            foreach (var message in response.Messages)
+            {
+                _snackBar.Add(message, Severity.Error);
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using Client
+@inject AuthenticationStateProvider _stateProvider
+@using global::Shared.Constants
+@inject IAuthorizationService _authorizationService
+@using Client.Infrastructure.Managers.Identity.Authentication.Contracts
+@using Client.Infrastructure.Managers.Identity.Roles.Contracts
+@using Client.Infrastructure.Managers.Identity.Users
+@inject IAuthenticationManager _authenticationManager
+@using Client.Shared
+@using global::Shared
+@using global::Shared.Requests
+@inject ISnackbar _snackBar
+@using global::Shared.Responses
+@inject NavigationManager _navigationManager
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MudBlazor
+@inject IDialogService _dialogService
+@inject IUserManager _userManager
+@inject IRoleManager _roleManager

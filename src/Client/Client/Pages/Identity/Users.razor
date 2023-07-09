@@ -1,0 +1,143 @@
+﻿@page "/identity/users"
+@layout MainLayout
+@using System.Security.Claims;
+@attribute [Authorize(Policy = Permissions.Users.View)]
+
+<style>
+    .mud-table-container {
+        overflow: auto;
+    }
+</style>
+
+<AppTitle Title="Usuários" Description="Gerencie usuários" />
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" Items="_userList" Dense="true" Bordered="true" Striped="true" Filter="new Func<UserResponse, bool>(Search)" @bind-user="_user">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                <MudButton DisableElevation Variant="Variant.Filled" OnClick="GetUsersAsync" StartIcon="@Icons.Material.Filled.Refresh" IconColor="Color.Surface" Color="Color.Secondary">Recarregar</MudButton>
+            </div>
+            <MudSpacer />
+            @if (_canSearchUsers)
+            {
+                <MudTextField @bind-Value="_searchString" Immediate="true" FullWidth=false Placeholder="Procure por usuários" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+            }
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Nome)">Nome</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Sobrenome)">Sobrenome</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Email)">Email</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.PhoneNumber)">Telefone</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<UserResponse, object>(x => x.Ativo)">Ativo</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right">Ações</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nome">
+                <MudHighlighter Text="@context.Nome" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Sobrenome">
+                <MudHighlighter Text="@context.Sobrenome" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Email">
+                <MudHighlighter Text="@context.Email" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Telefone">
+                <MudHighlighter Text="@context.PhoneNumber" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Ativo"><MudCheckBox @bind-Checked="@context.Ativo" ReadOnly Color="Color.Secondary"></MudCheckBox></MudTd>
+            <MudTd DataLabel="Ações" Style="text-align:right">
+                <MudMenu Label="Ações" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                    @if (_canViewRoles)
+                    {
+                        <MudMenuItem OnClick="(()=>ManageRoles(context.Id, context.Email))">Gerenciar Roles</MudMenuItem>
+                    }
+                    <MudMenuItem OnClick="(()=>ViewProfile(context.Id))">Ver perfil</MudMenuItem>
+                </MudMenu>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+    private List<UserResponse> _userList = new();
+    private UserResponse _user = new();
+    private string _searchString = "";
+
+    private ClaimsPrincipal _currentUser;
+    private bool _canCreateUsers;
+    private bool _canSearchUsers;
+    private bool _canExportUsers;
+    private bool _canViewRoles;
+    private bool _loaded;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentUser = await _authenticationManager.CurrentUser();
+        _canCreateUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Create)).Succeeded;
+        _canSearchUsers = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Users.Search)).Succeeded;
+        _canViewRoles = (await _authorizationService.AuthorizeAsync(_currentUser, Permissions.Roles.View)).Succeeded;
+
+        await GetUsersAsync();
+        _loaded = true;
+    }
+
+    private async Task GetUsersAsync()
+    {
+        var response = await _userManager.GetAllAsync();
+        if (response.Succeeded)
+        {
+            _userList = response.Data.ToList();
+        }
+        else
+        {
+            foreach (var message in response.Messages)
+            {
+                _snackBar.Add(message, Severity.Error);
+            }
+        }
+    }
+
+    private bool Search(UserResponse user)
+    {
+        if (string.IsNullOrWhiteSpace(_searchString)) return true;
+        if (user.Nome?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        if (user.Sobrenome?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        if (user.Email?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        if (user.PhoneNumber?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        if (user.UserName?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    private void ViewProfile(string userId)
+    {
+        _navigationManager.NavigateTo($"/user-profile/{userId}");
+    }
+
+
+    private void ManageRoles(string userId, string email)
+    {
+        _navigationManager.NavigateTo($"/identity/user-roles/{userId}");
+    }
+}
