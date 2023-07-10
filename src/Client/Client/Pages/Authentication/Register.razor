@@ -32,29 +32,29 @@
                         <MudTextField Label="Nome" Required="true"
                                       OnlyValidateIfDirty="true"
                                       Variant="Variant.Outlined"
-                                      RequiredError="Nome é necessário."
+                                      RequiredError="Nome Ã© necessÃ¡rio."
                                       @bind-Value="RegisterModel.Nome"/>
                         <MudTextField Label="Sobrenome" Required="true"
                                       OnlyValidateIfDirty="true"
                                       Variant="Variant.Outlined"
-                                      RequiredError="Sobrenome é necessário."
+                                      RequiredError="Sobrenome Ã© necessÃ¡rio."
                                       @bind-Value="RegisterModel.Sobrenome"/>
                         <MudTextField Label="Email" Required="true"
                                       OnlyValidateIfDirty="true"
                                       Variant="Variant.Outlined"
-                                      RequiredError="E-mail é necessário."
+                                      RequiredError="E-mail Ã© necessÃ¡rio."
                                       @bind-Value="RegisterModel.Email"
-                                      Validation="@(new EmailAddressAttribute() { ErrorMessage = "O e-mail não é válido" })"/>
+                                      Validation="@(new EmailAddressAttribute() { ErrorMessage = "O e-mail nÃ£o Ã© vÃ¡lido" })"/>
 
                         <MudTextField Label="Senha" @bind-Value="RegisterModel.Senha" Required="true" 
                                       InputType="PasswordInput" Variant="Variant.Outlined"
                                       For="(() => RegisterModel.Senha)"
-                                      RequiredError="Senha é necessária." OnlyValidateIfDirty="true" Adornment="Adornment.End"
+                                      RequiredError="Senha Ã© necessÃ¡ria." OnlyValidateIfDirty="true" Adornment="Adornment.End"
                                       AdornmentIcon="@PasswordInputIcon" AdornmentAriaLabel="Mostrar senha" 
                                       OnAdornmentClick="PasswordIconClick"/>
                         <MudTextField Label="Repita a senha" @bind-Value="RegisterModel.ConfirmaSenha" Required="true" 
                                       InputType="PasswordInput" Variant="Variant.Outlined"
-                                      RequiredError="Repetir a senha é necessário." OnlyValidateIfDirty="true" 
+                                      RequiredError="Repetir a senha Ã© necessÃ¡rio." OnlyValidateIfDirty="true" 
                                       Adornment="Adornment.End"
                                       AdornmentIcon="@PasswordInputIcon" AdornmentAriaLabel="Mostrar senha" 
                                       OnAdornmentClick="PasswordIconClick"
@@ -76,8 +76,8 @@
             </MudItem>
             <MudItem xs="12">
                 <MudStack Row="false">
-                    <MudText Typo="Typo.body2">Após registrar-se o seu usuário será: <strong>{nome}.{sobrenome}</strong> (tudo junto e minúsculo)</MudText>
-                    <MudText Typo="Typo.body2">Usuário administrador: admin - Senha: 123456</MudText>
+                    <MudText Typo="Typo.body2">ApÃ³s registrar-se o seu usuÃ¡rio serÃ¡: <strong>{nome}.{sobrenome}</strong> (tudo junto e minÃºsculo)</MudText>
+                    <MudText Typo="Typo.body2">UsuÃ¡rio administrador: admin - Senha: 123456</MudText>
                 </MudStack>
             </MudItem>
             <MudItem xs="12">
@@ -134,7 +134,7 @@
     private string PasswordMatch(string arg)
     {
         if (RegisterModel.Senha != arg)
-            return "As senhas não são iguais";
+            return "As senhas nÃ£o sÃ£o iguais";
         return null;
     }
 
