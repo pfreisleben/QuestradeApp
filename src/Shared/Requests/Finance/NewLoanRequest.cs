@@ -19,6 +19,10 @@ public record NewLoanRequest
     [StringLength(20, ErrorMessage = "Nome não pode ser maior que 20 caracteres")]
     public string Description { get; set; }
 
+    public NewLoanRequest()
+    {
+    }
+
     public NewLoanRequest(string userId, int numberOfPortions, decimal totalAmount, string description)
     {
         UserId = userId;

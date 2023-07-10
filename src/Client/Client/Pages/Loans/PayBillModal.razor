@@ -1,0 +1,45 @@
+﻿@using BillDto = global::Shared.Responses.Loans.BillDto
+@using global::Shared.Requests.Finance
+<MudDialog>
+    <DialogContent>
+        <MudDatePicker Label="Selecione data de pagamento" @bind-Date="date"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Pagar">Pagar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+
+    [Parameter]
+    public BillDto Bill { get; set; }
+
+    [Parameter]
+    public string UserId { get; set; }
+
+    private DateTime? date = DateTime.Today;
+
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+
+    private async Task Pagar()
+    {
+        var request = new PayBillRequest()
+        {
+            UserId = UserId,
+            PaymentDay = date ?? DateTime.Today,
+            BillId = Bill.Id
+        };
+        var pagamentoResult = await _loanManager.PayBill(request);
+
+        if (pagamentoResult.Succeeded)
+        {
+            MudDialog.Close();
+
+            _snackBar.Add($"Pagamento realizado com sucesso!", Severity.Success);
+        }
+    }
+
+}

@@ -12,11 +12,11 @@
                   @bind-Value="_model.NumberOfPortions" For="@(() => _model.NumberOfPortions)"/>
     <MudTextField InputType="InputType.Number" Label="Valor do empréstimo" HelperText="Informe o valor do empréstimo"
                   @bind-Value="_model.TotalAmount" For="@(() => _model.TotalAmount)"/>
-    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Solicitar</MudButton>
+    <MudButton ButtonType="ButtonType.Submit" OnClick="OnValidSubmit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Solicitar</MudButton>
 </EditForm>
 
 @code {
-    private NewLoanRequest _model;
+    private NewLoanRequest _model = new ();
     private ClaimsPrincipal _currentUser;
     private string _userId;
 
@@ -26,7 +26,7 @@
         _userId = _currentUser.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 
-    private async Task OnValidSubmit(EditContext context)
+    private async Task OnValidSubmit()
     {
         var scoreResult = await _scoreManager.CheckIfUserCanApplyToLoan(_userId);
         if (scoreResult.Succeeded)
@@ -38,12 +38,17 @@
                 _snackBar.Add("Desculpe, você não pode solicitar um empréstimo no momento.", Severity.Error);
                 return;
             }
-            
-            
-        }
-        else
-        {
-            
+            var request = new NewLoanRequest(_userId, _model.NumberOfPortions, _model.TotalAmount, _model.Description);
+            var loanResult = await _loanManager.CreateLoan(request);
+
+            if (loanResult.Succeeded)
+            {
+                _snackBar.Add("Empréstimo criado com sucesso!", Severity.Success);
+            }
+            else
+            {
+                _snackBar.Add("Falha ao criar empréstimo, tente novamente", Severity.Error);
+            }
         }
     }
 }

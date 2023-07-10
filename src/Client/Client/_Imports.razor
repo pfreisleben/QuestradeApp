@@ -13,10 +13,12 @@
 @using Client.Infrastructure.Managers.Identity.Authentication.Contracts
 @using Client.Infrastructure.Managers.Identity.Roles.Contracts
 @using Client.Infrastructure.Managers.Identity.Users
+@using Client.Infrastructure.Managers.Loans.Contracts
 @using Client.Infrastructure.Managers.Score.Contracts
 @inject IAuthenticationManager _authenticationManager
 @using Shared.Components
 @using Client.Shared
+@using Client.Shared.Components
 @using global::Shared
 @using global::Shared.Requests
 @inject ISnackbar _snackBar
@@ -29,3 +31,4 @@
 @inject IUserManager _userManager
 @inject IRoleManager _roleManager
 @inject IScoreManager _scoreManager;
+@inject ILoanManager _loanManager;

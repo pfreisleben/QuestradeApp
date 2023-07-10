@@ -1,0 +1,109 @@
+﻿@page "/loans/user/{Id}"
+@layout MainLayout
+@using global::Shared.Responses.Loans
+@using System.Globalization
+
+<AppTitle Title="Empréstimos" Description="Consulte empréstimos"/>
+
+@if (!_loaded)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" Items="_model" Dense="true" Bordered="true" Striped="true" Filter="new Func<LoanResponse, bool>(Search)">
+        <ToolBarContent>
+            <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="Procure por empréstimos..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<LoanResponse, object>(x => x.Id)">Id</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<LoanResponse, object>(x => x.Description)">Descrição</MudTableSortLabel>
+            </MudTh>
+            <MudTh>
+                <MudTableSortLabel SortBy="new Func<LoanResponse, object>(x => x.Date)">Data</MudTableSortLabel>
+            </MudTh>
+            <MudTh Style="text-align:right">Ações</MudTh>
+        </HeaderContent>
+
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Descrição">
+                <MudHighlighter Text="@context.Description" HighlightedText="@_searchString"/>
+            </MudTd>
+            <MudTd DataLabel="Data">
+                <MudHighlighter Text="@context.Date.ToString(CultureInfo.InvariantCulture)" HighlightedText="@_searchString"/>
+            </MudTd>
+            <MudTd DataLabel="Ações" Style="text-align:right">
+                <MudMenu Label="Ações" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                    <MudMenuItem OnClick="(() => GerenciarParcelas(context.Id))">Gerenciar Parcelas</MudMenuItem>
+                </MudMenu>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudContainer>
+                <MudTablePager RowsPerPageString="Itens por página:"/>
+
+            </MudContainer>
+
+        </PagerContent>
+    </MudTable>
+}
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private bool _loaded;
+    private List<LoanResponse> _model;
+    private string _searchString;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var loanResult = await _loanManager.ListLoans(Id);
+        if (loanResult.Succeeded)
+        {
+            _model = loanResult.Data;
+            _loaded = true;
+        }
+        else
+        {
+            _snackBar.Add($"Não foi possivel carregar os empréstimos, por favor recarregue a página.", Severity.Error);
+        }
+    }
+
+    private bool Search(LoanResponse loan)
+    {
+        if (string.IsNullOrWhiteSpace(_searchString)) return true;
+        if (loan.Description?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    private async Task GerenciarParcelas(int id)
+    {
+        var loan = _model.FirstOrDefault(x => x.Id == id);
+
+        var parameters = new DialogParameters();
+        {
+            parameters.Add("Loan", loan);
+            parameters.Add("UserId", Id);
+        }
+        
+        var options = new DialogOptions { CloseButton = true,  MaxWidth = MaxWidth.Medium, FullWidth = false, DisableBackdropClick = false };
+        var dialog = _dialogService.Show<LoansModal>($"Gerenciar parcelas do empréstimo {loan!.Id}", parameters, options);
+
+        var result = await dialog.Result;
+     
+    }
+
+
+}
+

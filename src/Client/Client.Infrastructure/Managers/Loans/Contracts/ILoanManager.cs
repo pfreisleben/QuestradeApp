@@ -4,7 +4,7 @@ using Shared.Responses.Loans;
 
 namespace Client.Infrastructure.Managers.Loans.Contracts;
 
-public interface ILoanService
+public interface ILoanManager
 {
     Task<CommandResult> CreateLoan(NewLoanRequest request);
     Task<CommandResult<List<LoanResponse>>> ListLoans(string userId);

@@ -7,11 +7,11 @@ using Shared.Responses.Loans;
 
 namespace Client.Infrastructure.Managers.Loans.Services;
 
-public class LoanService : ILoanService
+public class LoanManager : ILoanManager
 {
     private readonly HttpClient _httpClient;
 
-    public LoanService(IHttpClientFactory httpClientFactory)
+    public LoanManager(IHttpClientFactory httpClientFactory)
     {
         _httpClient = httpClientFactory.CreateClient(HttpClientNames.FinanceApi);
     }

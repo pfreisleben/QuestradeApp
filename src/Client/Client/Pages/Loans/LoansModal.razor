@@ -1,0 +1,67 @@
+﻿@using global::Shared.Responses.Loans
+@using System.Globalization
+<MudDialog>
+    <DialogContent>
+        <MudTable Hover="true" Elevation="25" Items="Loan.Bills" Dense="true" Bordered="true" Striped="true">
+            <HeaderContent>
+                <MudTh>Id</MudTh>
+                <MudTh>Valor</MudTh>
+                <MudTh>Vencimento</MudTh>
+                <MudTh>Pago</MudTh>
+                <MudTh>Data pagamento</MudTh>
+                <MudTh Style="text-align:right">Ações</MudTh>
+            </HeaderContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="Id">@context.Id</MudTd>
+                <MudTd DataLabel="Valor">@($"R$ {context.Value.ToString(CultureInfo.InvariantCulture)}")</MudTd>
+                <MudTd DataLabel="Vencimento">@context.DueDate.ToString("dd/MM/yyyy")</MudTd>
+                <MudTd DataLabel="Pago">@context.Payed.ToString(CultureInfo.InvariantCulture)</MudTd>
+                <MudTd DataLabel="Data pagamento">@context.PaymentDay?.ToString(CultureInfo.InvariantCulture)</MudTd>
+                <MudTd DataLabel="Ações" Style="text-align:right">
+                    <MudMenu Label="Ações" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                        <MudMenuItem OnClick="(() => PagarParcela(context.Id))">Pagar Parcela</MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+            </RowTemplate>
+            <PagerContent>
+                <MudContainer>
+                    <MudTablePager RowsPerPageString="Itens por página:"/>
+
+                </MudContainer>
+
+            </PagerContent>
+        </MudTable>
+    </DialogContent>
+</MudDialog>
+
+@code {
+
+    [Parameter]
+    public LoanResponse Loan { get; set; } = new();
+
+    [Parameter]
+    public string UserId { get; set; }
+
+
+    [CascadingParameter]
+    private MudDialogInstance MudDialog { get; set; }
+
+
+    private async Task PagarParcela(int id)
+    {
+        var bill = Loan.Bills.FirstOrDefault(x => x.Id == id);
+
+        var parameters = new DialogParameters();
+        {
+            parameters.Add("Bill", bill);
+            parameters.Add("UserId", UserId);
+        }
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = false, DisableBackdropClick = true };
+        var dialog = _dialogService.Show<PayBillModal>($"Pagar parcela de id {bill.Id}", parameters, options);
+
+        var result = await dialog.Result;
+    }
+
+}

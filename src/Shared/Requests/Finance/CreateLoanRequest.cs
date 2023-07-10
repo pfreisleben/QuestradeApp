@@ -7,6 +7,7 @@ public record CreateLoanRequest()
 
 public record LoanDto()
 {
+    public int Id { get; set; }
     public DateTime Date { get;  set; }
     public string Description { get;  set; }
     public string UserId { get;  set; }
@@ -15,6 +16,7 @@ public record LoanDto()
 
 public record BillDto()
 {
+    public int Id { get; set; }
     public decimal Value { get;  set; }
     public bool Payed { get;  set; }
     public DateTime DueDate { get;  set; }
